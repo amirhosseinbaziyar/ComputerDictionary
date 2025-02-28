@@ -1,3 +1,20 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "computerdictionary";
+
+// ایجاد اتصال
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// بررسی اتصال
+if ($conn->connect_error) {
+    die("اتصال ناموفق: " . $conn->connect_error);
+}
+
+$sql = "SELECT * FROM `term` ORDER BY TermInitialLetters;";
+$result = $conn->query($sql);
+?>
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
     <head>
@@ -66,11 +83,18 @@
                             <label for="search_box"></label>
                             <input dir="ltr" class="form-control search-box" type="text" id="search_box" placeholder="search, learn, enjoy" onkeyup="filterFunction()" autocomplete="off">
                             <div class="autocomplete-items" id="autocomplete_list">
-                                <div onclick="selectItem(this)">San Francisco</div>
-                                <div onclick="selectItem(this)">New York</div>
-                                <div onclick="selectItem(this)">Seattle</div>
-                                <div onclick="selectItem(this)">Los Angeles</div>
-                                <div onclick="selectItem(this)">Chicago</div>
+                                <?php
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                ?>
+                                <div onclick="selectItem(this)"><?php echo $row["Term"]?><?php echo isset($row["TermAcronym"]) ? " | " . $row["TermAcronym"] : "";?></div>
+                                <?php
+                                    }
+                                } else {
+                                    echo "<div style='direction: rtl; text-align: right'>","یک مشکلی پیش اومده لطفا از سایت خارج شده و دوباره وارد شوید اگر درست نشد با پشتیبانی تماس بگیرید","</div>";
+                                }
+                                ?>
                             </div>
                         </div>
                     </form>
