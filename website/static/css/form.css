@@ -1,0 +1,42 @@
+.autocomplete {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: white;
+  color: black;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+  z-index: 1000;
+  display: none;
+  text-align: left;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.autocomplete-items div:hover {
+  background: #007bff;
+  color: white;
+}
+
+.custom-width {
+  width: 100%;
+}
+
+@media (min-width: 780px) {
+  .custom-width {
+    width: 50%;
+  }
+}
+
+/*# sourceMappingURL=form.css.map */
