@@ -24,6 +24,10 @@
   transition: background 0.3s;
 }
 
+.autocomplete-items div.hidden {
+  display: none;
+}
+
 .autocomplete-items div:hover {
   background: #007bff;
   color: white;

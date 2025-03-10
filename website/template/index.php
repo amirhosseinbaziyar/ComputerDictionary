@@ -13,7 +13,9 @@ if ($conn->connect_error) {
 }
 
 $sql = "SELECT * FROM `term` ORDER BY TermInitialLetters;";
+$sql2 = "SELECT COUNT(`Term`) AS term_count FROM `term`;";
 $result = $conn->query($sql);
+$result2 = $conn->query($sql2);
 ?>
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
@@ -60,6 +62,9 @@ $result = $conn->query($sql);
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">درباره ما</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="timeList" href="#"></a>
+                                    </li>
                                 </ul>
                                 <ul class="d-flex navbar-nav mb-2 mb-lg-0">
                                     <li class="nav-item">
@@ -87,9 +92,9 @@ $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
-                                ?>
-                                <div onclick="selectItem(this)"><?php echo $row["Term"]?><?php echo isset($row["TermAcronym"]) ? " | " . $row["TermAcronym"] : "";?></div>
-                                <?php
+                                        $term = strtolower($row["Term"]);
+                                        $acronym = isset($row["TermAcronym"]) ? " | " . $row["TermAcronym"] : "";
+                                        echo "<div onclick='selectItem(this)' data-term='{$term}'>" . $row["Term"] . $acronym . "</div>";
                                     }
                                 } else {
                                     echo "<div style='direction: rtl; text-align: right'>","یک مشکلی پیش اومده لطفا از سایت خارج شده و دوباره وارد شوید اگر درست نشد با پشتیبانی تماس بگیرید","</div>";
@@ -98,7 +103,12 @@ $result = $conn->query($sql);
                             </div>
                         </div>
                     </form>
-                    <p>در حال حاضر دیکشنری شامل 1000 واژه است و همچنان در حال گسترش می‌باشد.</p>
+                    <p>در حال حاضر دیکشنری شامل <?php
+                        // Assuming $result2 is the result of a query like the one above
+                        $row = $result2->fetch_assoc();
+                        echo $row['term_count']; // This will display the count
+                        ?>
+                        واژه است و همچنان در حال گسترش می‌باشد.</p>
                 </div>
             </div>
         </div>
