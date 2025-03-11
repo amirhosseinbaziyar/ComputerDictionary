@@ -1,55 +1,46 @@
+let executionTimes = [];
+
 function filterFunction() {
+    let startTime = performance.now();  // شروع زمان‌گیری
+
     let input = document.getElementById("search_box").value.toLowerCase();
-    let items = document.querySelectorAll(".autocomplete-items div");
-    let hasMatch = false;
-    let executionTimes = [];
+    let autocompleteList = document.getElementById("autocomplete_list");
 
-    document.getElementById("autocomplete_list").style.display = "block";
+    // پاک کردن پیشنهادات قبلی
+    autocompleteList.innerHTML = "";
 
-    const start = performance.now();
+    if (!input) {
+        autocompleteList.style.display = "none";
+        return;
+    }
 
-    let count = 0;
-    items.forEach(item => {
-        let text = item.dataset.term;
+    let filteredTerms = terms
+        .filter(t => t.term.startsWith(input))
+        .slice(0, 25);
 
-        if (count < 25 && text.startsWith(input)) {
-            item.classList.remove("hidden");
-            hasMatch = true;
-            count++;
-        } else {
-            item.classList.add("hidden");
-        }
+    if (filteredTerms.length === 0) {
+        filteredTerms = terms.filter(t => t.term.includes(input)).slice(0, 25);
+    }
+
+    filteredTerms.forEach(t => {
+        let div = document.createElement("div");
+        div.innerText = t.display;
+        div.dataset.term = t.term;
+        div.onclick = function () {
+            selectItem(this);
+        };
+        autocompleteList.appendChild(div);
     });
 
-    // اگر کلمه‌ای که با ورودی شروع بشه نبود، بگرد کلماتی رو نشون بده که ورودی داخلشونه
-    if (!hasMatch) {
-        items.forEach(item => {
-            if (item.dataset.term.includes(input)) {
-                item.classList.remove("hidden");
-            }
-        });
-    }
+    autocompleteList.style.display = "block";
 
-    const end = performance.now();
-    const duration = (end-start).toFixed(2);
-    executionTimes.push(Number(duration))
-    const average = executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length;
-    console.log(average.toFixed(2));
-    document.getElementById("timeList").innerHTML = executionTimes;
-
-    if (input === "") {
-        document.getElementById("autocomplete_list").style.display = "none";
-    }
+    let endTime = performance.now();  // پایان زمان‌گیری
+    let executionTime = (endTime - startTime).toFixed(3);
+    console.log(`filterFunction اجرا شد در: ${executionTime} میلی‌ثانیه`);
+    executionTimes.push(parseFloat(executionTime));
+    let averageTime = (executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length).toFixed(3);
+    let minTime = Math.min(...executionTimes).toFixed(3);
+    let maxTime = Math.max(...executionTimes).toFixed(3);
+    let countTimes = executionTimes.length; // تعداد زمان‌های ثبت‌شده
+    document.getElementById("timeList").innerText = `میانگین: ${averageTime} ms | کمترین: ${minTime} ms | بیشترین: ${maxTime} ms | تعداد: ${countTimes}`;
 }
-
-
-function selectItem(el) {
-    document.getElementById("search_box").value = el.innerText;
-    document.getElementById("autocomplete_list").style.display = "none";
-}
-
-document.addEventListener("click", function(e) {
-    if (!e.target.closest(".autocomplete")) {
-        document.getElementById("autocomplete_list").style.display = "none";
-    }
-});

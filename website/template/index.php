@@ -1,20 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "computerdictionary";
+require "../static/php/terms.php";
 
-// ایجاد اتصال
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// بررسی اتصال
-if ($conn->connect_error) {
-    die("اتصال ناموفق: " . $conn->connect_error);
-}
-
-$sql = "SELECT * FROM `term` ORDER BY TermInitialLetters;";
 $sql2 = "SELECT COUNT(`Term`) AS term_count FROM `term`;";
-$result = $conn->query($sql);
 $result2 = $conn->query($sql2);
 ?>
 <!DOCTYPE html>
@@ -26,7 +13,9 @@ $result2 = $conn->query($sql2);
         <link rel="stylesheet" href="../static/css/image.css">
         <link rel="stylesheet" href="../static/css/form.css">
         <script rel="script">
-            document.getElementById("search_box").name = "search_" + Math.random();
+            window.onload = function() {
+                document.getElementById("search_box").name = "search_" + Math.random();
+            };
         </script>
     </head>
     <body>
@@ -62,9 +51,6 @@ $result2 = $conn->query($sql2);
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">درباره ما</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="timeList" href="#"></a>
-                                    </li>
                                 </ul>
                                 <ul class="d-flex navbar-nav mb-2 mb-lg-0">
                                     <li class="nav-item">
@@ -93,7 +79,7 @@ $result2 = $conn->query($sql2);
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         $term = strtolower($row["Term"]);
-                                        $acronym = isset($row["TermAcronym"]) ? " | " . $row["TermAcronym"] : "";
+                                        $acronym = !empty($row["TermAcronym"]) ? " | " . $row["TermAcronym"] : "";
                                         echo "<div onclick='selectItem(this)' data-term='{$term}'>" . $row["Term"] . $acronym . "</div>";
                                     }
                                 } else {
@@ -109,10 +95,12 @@ $result2 = $conn->query($sql2);
                         echo $row['term_count']; // This will display the count
                         ?>
                         واژه است و همچنان در حال گسترش می‌باشد.</p>
+                    <p id="timeList"></p>
                 </div>
             </div>
         </div>
         <script rel="script" src="../static/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script rel="script" src="../static/js/terms.js"></script>
         <script rel="script" src="../static/js/autocomplete.js"></script>
     </body>
 </html>

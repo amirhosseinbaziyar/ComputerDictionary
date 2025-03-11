@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جستجوی سریع با Trie</title>
+    <script src="https://cdn.jsdelivr.net/npm/trie-search/dist/trie-search.min.js"></script>
+    <style>
+        .hidden { display: none; }
+        .autocomplete-items div { padding: 5px; border: 1px solid #ddd; cursor: pointer; }
+    </style>
+</head>
+<body>
+<input type="text" id="search_box" oninput="filterFunction()" placeholder="جستجو کنید...">
+<div id="autocomplete_list"></div>
+<p>زمان پردازش: <span id="timeList"></span> میلی‌ثانیه</p>
+
+<script>
+    let words = ["apple", "application", "apartment", "banana", "band", "basketball", "car", "carpet", "camera", "cat"];
+    let trie = new TrieSearch(); // ایجاد یک نمونه از Trie
+    words.forEach(word => trie.add(word)); // اضافه کردن کلمات به Trie
+
+    function filterFunction() {
+        let input = document.getElementById("search_box").value.toLowerCase();
+        let listContainer = document.getElementById("autocomplete_list");
+        listContainer.innerHTML = "";
+
+        if (input === "") {
+            listContainer.style.display = "none";
+            return;
+        }
+
+        const start = performance.now();
+
+        let results = trie.get(input); // دریافت سریع پیشنهادات از Trie
+
+        const end = performance.now();
+        document.getElementById("timeList").textContent = (end - start).toFixed(2);
+
+        if (results.length === 0) {
+            listContainer.innerHTML = "<div>موردی یافت نشد</div>";
+            return;
+        }
+
+        results.slice(0, 25).forEach(term => {
+            let div = document.createElement("div");
+            div.textContent = term;
+            listContainer.appendChild(div);
+        });
+
+        listContainer.style.display = "block";
+    }
+</script>
+</body>
+</html>
