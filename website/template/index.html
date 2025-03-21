@@ -68,13 +68,14 @@
                             <label for="search_box"></label>
                             <input dir="ltr" class="form-control search-box" type="text" id="search_box" placeholder="search, learn, enjoy" onkeyup="filterFunction()" autocomplete="off">
                             <div class="autocomplete-items" id="autocomplete_list">
+                                <!-- php format: data-term='{$term}' Term to small word -->
                                 <!-- php format: $acronym = !empty($row["TermAcronym"]) ? " | " . $row["TermAcronym"] : ""; -->
                                 <!-- php format: "<div onclick='selectItem(this)' data-term='{$term}'>" . $row["Term"] . $acronym . "</div>" -->
-                                <div onclick="selectItem(this)">San Francisco</div>
-                                <div onclick="selectItem(this)">New York</div>
-                                <div onclick="selectItem(this)">Seattle</div>
-                                <div onclick="selectItem(this)">Los Angeles</div>
-                                <div onclick="selectItem(this)">Chicago</div>
+                                <!--<div onclick="selectItem(this)" data-term="San Francisco">San Francisco</div>-->
+                                <!--<div onclick="selectItem(this)" data-term="New York">New York</div>-->
+                                <!--<div onclick="selectItem(this)" data-term="Seattle">Seattle</div>-->
+                                <!--<div onclick="selectItem(this)" data-term="Los Angeles">Los Angeles</div>-->
+                                <!--<div onclick="selectItem(this)" data-term="Chicago">Chicago</div>-->
                             </div>
                         </div>
                     </form>

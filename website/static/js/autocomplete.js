@@ -1,3 +1,5 @@
+console.log("check check check")
+
 let executionTimes = [];
 
 function filterFunction() {
@@ -43,4 +45,11 @@ function filterFunction() {
     let maxTime = Math.max(...executionTimes).toFixed(3);
     let countTimes = executionTimes.length; // تعداد زمان‌های ثبت‌شده
     document.getElementById("timeList").innerText = `میانگین: ${averageTime} ms | کمترین: ${minTime} ms | بیشترین: ${maxTime} ms | تعداد: ${countTimes}`;
+}
+
+
+// مطمئن شو این تابع تعریف شده باشه
+function selectItem(element) {
+    console.log("Selected term:", element.dataset.term);
+    window.location.href = "/" + element.dataset.term;
 }
